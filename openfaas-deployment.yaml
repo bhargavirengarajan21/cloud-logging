@@ -39,7 +39,6 @@ spec:
           image: ghcr.io/openfaas/gateway:0.27.12
           ports:
             - containerPort: 8080
-            - containerPort: 8085
           env:
             - name: read_timeout
               value: "1m05s"
@@ -52,7 +51,7 @@ spec:
             - name: async
               value: "true"
             - name: faas_nats_address
-              value: "nats.openfaas.svc.cluster.local"
+              value: "nats.openfaas"
             - name: faas_nats_port
               value: "4222"
             - name: basic_auth
