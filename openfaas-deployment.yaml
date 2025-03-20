@@ -55,6 +55,8 @@ spec:
               value: "nats.openfaas.svc.cluster.local"
             - name: faas_nats_port
               value: "4222"
+            - name: faas_nats_cluster_id
+              value: "test-cluster" # Added cluster ID for matching NATS cluster ID
             - name: basic_auth
               value: "false"
           readinessProbe:
@@ -101,7 +103,9 @@ spec:
             - "5s"
             - "-hbf"
             - "2"
-
+            - "-cluster_id"
+            - "test-cluster"  # Added cluster ID for matching with Gateway
+          
 ---
 apiVersion: v1
 kind: Service
