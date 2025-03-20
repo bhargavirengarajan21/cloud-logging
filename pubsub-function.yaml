@@ -1,0 +1,19 @@
+apiVersion: openfaas.com/v1
+kind: Function
+metadata:
+  name: log-pubsub-handler
+  namespace: openfaas-fn
+spec:
+  name: log-pubsub-handler
+  image: bhargavi211/log-pubsub-handler:latest
+  environment:
+    write_debug: "true"
+    gateway_hostname: "gateway.openfaas"
+  annotations:
+    prometheus.io.scrape: "false"
+  limits:
+    memory: 128Mi
+    cpu: 100m
+  requests:
+    memory: 64Mi
+    cpu: 50m
