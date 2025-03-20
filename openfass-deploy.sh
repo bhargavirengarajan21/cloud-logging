@@ -6,7 +6,8 @@ echo "Creating namespaces..."
 kubectl apply -f openfaas-deployment.yaml
 
 echo "Waiting for OpenFaaS to be ready..."
-kubectl rollout status -n openfaas deploy/gateway
+kubectl rollout status -n openfaas deploy/gateway --timeout=60s
+
 
 # Create Secrets and ConfigMap
 ./secrets.sh

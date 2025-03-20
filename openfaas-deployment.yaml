@@ -39,7 +39,7 @@ spec:
           image: ghcr.io/openfaas/gateway:0.27.12
           ports:
             - containerPort: 8080
-            - containerPort: 8080
+            - containerPort: 8085
           env:
             - name: read_timeout
               value: "1m05s"
@@ -48,15 +48,18 @@ spec:
             - name: upstream_timeout
               value: "1m"
             - name: functions_provider_url
-              value: "http://127.0.0.1:8081/"
+              value: "http://gateway.openfaas:8080/"
             - name: async
               value: "true"
             - name: faas_nats_address
-              value: "nats.openfaas.svc.cluster.local:4222"
+              value: "nats.openfaas.svc.cluster.local"
             - name: faas_nats_port
               value: "4222"
             - name: basic_auth
               value: "false"
+            - name: faas_nats_cluster_id
+              value: "faas-cluster"
+
           readinessProbe:
             httpGet:
               path: /healthz
@@ -89,7 +92,7 @@ spec:
           image: nats-streaming:0.25.6
           ports:
             - containerPort: 4222
-            - containerPort: 8222
+            - containerPort: 6222
           args:
             - "-p"
             - "4222"
@@ -101,6 +104,8 @@ spec:
             - "5s"
             - "-hbf"
             - "2"
+            - "-cid"
+            - "faas-cluster"
 
 ---
 apiVersion: v1
@@ -109,7 +114,7 @@ metadata:
   name: gateway
   namespace: openfaas
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 8080
       targetPort: 8080
@@ -130,8 +135,8 @@ spec:
       targetPort: 4222
       protocol: TCP
       name: client
-    - port: 6222
-      targetPort: 6222
+    - port: 8222
+      targetPort: 8222
       protocol: TCP
       name: cluster
   selector:
